@@ -28,6 +28,9 @@ BIN_DIRECTORY=$APP_DIRECTORY/usr/bin
 rm -rf AppDir
 
 mkdir $APP_DIRECTORY/usr -p
+mkdir $APP_DIRECTORY/usr/share/icons/hicolor/512x512/apps/ -p
+mkdir $APP_DIRECTORY/usr/share/icons/hicolor/256x256/apps/ -p
+mkdir $APP_DIRECTORY/usr/share/icons/hicolor/128x128/apps/ -p
 
 echo "==> Download VSCode"
 wget -O $APP_DIRECTORY/vscode.tar.gz https://code.visualstudio.com/sha/download?build=stable\&os=linux-x64
