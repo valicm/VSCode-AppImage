@@ -49,7 +49,7 @@ chmod +x $APP_DIRECTORY/AppRun
 echo "==> Extract defaults for AppImage"
 # Add defaults which we need for proper app image. Desktop files, icons.
 cp code.desktop $APP_DIRECTORY/.
-cp $BIN_DIRECTORY/resources/app/resources/linux/code.png cd $APP_DIRECTORY/code.png
+cp $BIN_DIRECTORY/resources/app/resources/linux/code.png $APP_DIRECTORY/code.png
 cd $APP_DIRECTORY
 convert code.png -resize 512x512 usr/share/icons/hicolor/512x512/apps/code.png
 convert code.png -resize 256x256 usr/share/icons/hicolor/256x256/apps/code.png
