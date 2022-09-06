@@ -36,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: Postman.AppImage
+          name: VSCode.AppImage
           path: 'dist'
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
