@@ -28,7 +28,7 @@ wget -O vscode.tar.gz https://code.visualstudio.com/sha/download?build=stable\&o
 
 echo "==> Extract VSCode"
 tar -xzvf *.tar.gz && rm -r *.tar.gz
-PACKAGE=$(cat VSCode-linux-x64/app/resources/package.json)
+PACKAGE=$(cat VSCode-linux-x64/resources/app/package.json)
 VERSION=$(echo "$PACKAGE" | jq -r  ".version")
 
 # Get GitHub user and repo
