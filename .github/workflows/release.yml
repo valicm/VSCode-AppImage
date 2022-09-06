@@ -1,0 +1,49 @@
+name: Build AppImage
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "5 */12 * * *"
+  push:
+    branches:
+      - "main"
+
+jobs:
+  version:
+    name: VSCode AppImage Version
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      create: ${{ steps.check.outputs.create }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check version
+        id: check
+        run: |
+          bash version.sh
+  build:
+    name: VSCode AppImage Build
+    needs: version
+    if: ${{ needs.version.outputs.create == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build VSCode
+        run: |
+          bash build.sh
+          echo "$VSCODE_VERSION"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Postman.AppImage
+          path: 'dist'
+      - name: Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          title: VSCode AppImage ${{ env.VSCODE_VERSION }}
+          automatic_release_tag: latest
+          prerelease: false
+          files: |
+            dist/
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
