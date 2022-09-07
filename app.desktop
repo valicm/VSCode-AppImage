@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=VSCode
-GenericName=Visual Studio Code
+GenericName=VSCode
 Comment=Code Editing. Redefined.
 Exec=code --unity-launch %F
 Icon=code
@@ -17,3 +17,8 @@ Actions=new-empty-window;
 Name=New Empty Window
 Exec=code --new-window %F
 Icon=code
+
+VersionUrl=https://code.visualstudio.com/sha/download?build=stable\&os=linux-x64
+VersionFile=resources/app/package.json
+VersionBash=jq -r  .version
+VersionIcon=code.png

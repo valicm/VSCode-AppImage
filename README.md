@@ -6,6 +6,8 @@
 ## Get Started
 
 #### [Download the latest stable release](https://github.com/valicm/VSCode-AppImage/releases/latest)
+- stable release only
+- supports update of the AppImage
 
 ### Executing
 #### File Manager
@@ -27,3 +29,7 @@ chmod +x VSCode-*.AppImage
 #### Official source code
 The official source code of the Visual Studio Code is available at links provided
 https://github.com/microsoft/vscode
+
+#### Build
+The AppImage is built from .tar.gz Visual Studio Code package by GitHub Continuous Integration using this
+bash script https://github.com/valicm/appimage-bash.
