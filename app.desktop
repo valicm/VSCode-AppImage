@@ -19,6 +19,6 @@ Exec=code --new-window %F
 Icon=code
 
 VersionUrl=https://code.visualstudio.com/sha/download?build=stable\&os=linux-x64
-VersionFile=resources/app/package.json
+VersionFile=VSCode-linux-x64/resources/app/package.json
 VersionBash=jq -r  .version
 VersionIcon=code.png
