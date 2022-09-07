@@ -15,20 +15,22 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - name: Check version
+      - name: Build
         id: build
-        run: |
-          wget https://raw.githubusercontent.com/valicm/appimage-bash/main/build.sh
-          chmod +x build.sh
-          bash build.sh verify
+        uses: valicm/appimage-bash@main
+        with:
+          version_url: 'https://code.visualstudio.com/sha/download?build=stable\&os=linux-x64'
+          version_file: 'resources/app/package.json'
+          version_bash: 'jq -r  .version'
+          version_icon: 'code.png'
       - name: Upload artifact
-        if: ${{ env.APP_UPDATE_NEEDED == 1 }}
+        if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
         uses: actions/upload-artifact@v1
         with:
           name: ${{ env.APP_SHORT_NAME }}.AppImage
           path: 'dist'
       - name: Release
-        if: ${{ env.APP_UPDATE_NEEDED == 1 }}
+        if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
         uses: marvinpinto/action-automatic-releases@latest
         with:
           title: ${{ env.APP_NAME }} AppImage ${{ env.APP_VERSION }}
