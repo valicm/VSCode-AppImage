@@ -15,24 +15,27 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - name: Get Zed Version
+      - name: Set up directories and version file
         id: get_zed_version
         run: |
+          mkdir -p AppDir/usr/bin
+
           # Fetch the latest release information using the GitHub API
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/zed-industries/zed/releases/latest)
 
           # Extract the version tag
           VERSION=$(echo $LATEST_RELEASE | jq -r '.tag_name' | sed 's/^v//')
 
-          # Create the version.json file
-          echo "{\"version\": \"$VERSION\"}" > version.json
-          cat version.json
+          # Create the version.json file directly in AppDir/usr/bin
+          echo "{\"version\": \"$VERSION\"}" > AppDir/usr/bin/version.json
+          echo "Created version.json with content:"
+          cat AppDir/usr/bin/version.json
       - name: Build
         id: build
         uses: valicm/appimage-bash@main
         with:
           version_url: "https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz"
-          version_file: "../../../home/runner/work/Zed-AppImage/Zed-AppImage/version.json"
+          version_file: "version.json"
           version_icon: "zed.png"
       - name: Upload artifact
         if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
