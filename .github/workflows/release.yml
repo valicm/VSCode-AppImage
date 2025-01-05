@@ -21,13 +21,12 @@ jobs:
           VERSION_URL=$(curl -s -I https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz | grep Location | awk '{print $2}')
           VERSION=$(echo $VERSION_URL | sed -E 's/.*zed-linux-x86_64-(.*).tar.gz/\1/')
           echo "{\"version\": \"$VERSION\"}" > version.json
-          CARPETA=$(pwd)
       - name: Build
         id: build
         uses: valicm/appimage-bash@main
         with:
           version_url: "https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz"
-          version_file: "${{ env.CARPETA }}/version.json"
+          version_file: "version.json"
           version_icon: "zed.png"
       - name: Upload artifact
         if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
