@@ -20,12 +20,14 @@ jobs:
       - name: Get Zed Version
         id: get_zed_version
         run: |
-        
+
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/zed-industries/zed/releases/latest)
           
           VERSION=$(echo $LATEST_RELEASE | jq -r '.tag_name' | sed 's/^v//')
+
+          mkdir -p AppDir/usr/bin
           
-          echo "{\"version\": \"$VERSION\"}" > version.json
+          echo "{\"version\": \"$VERSION\"}" > AppDir/usr/bin/version.json
       - name: Display version.json
         run: cat version.json
       - name: Build
