@@ -32,4 +32,4 @@ https://github.com/zed-industries/zed
 
 #### Build
 The AppImage is built from .tar.gz Zed package by GitHub Continuous Integration using this
-bash script https://github.com/valicm/appimage-bash.
+bash script https://github.com/lavilao/appimage-bash.
