@@ -15,12 +15,15 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+      - name: Set up directories
+        run: |
+          mkdir -p AppDir/usr/bin
       - name: Get Zed Version
         id: get_zed_version
         run: |
           VERSION_URL=$(curl -s -I https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz | grep Location | awk '{print $2}')
           VERSION=$(echo $VERSION_URL | sed -E 's/.*zed-linux-x86_64-(.*).tar.gz/\1/')
-          echo "{\"version\": \"$VERSION\"}" > version.json
+          echo "{\"version\": \"$VERSION\"}" > AppDir/usr/bin/version.json
       - name: Build
         id: build
         uses: valicm/appimage-bash@main

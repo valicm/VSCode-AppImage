@@ -1,0 +1,151 @@
+Run VERSION_URL=$(curl -s -I https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz | grep Location | awk '{print $2}')
+  VERSION_URL=$(curl -s -I https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz | grep Location | awk '{print $2}')
+  VERSION=$(echo $VERSION_URL | sed -E 's/.*zed-linux-x86_64-(.*).tar.gz/\1/')
+  echo "{\"version\": \"$VERSION\"}" > version.json
+  shell: /usr/bin/bash -e {0}
+  env:
+    GITHUB_TOKEN: ***
+
+Run valicm/appimage-bash@main
+  with:
+    version_url: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    version_file: version.json
+    version_icon: zed.png
+    version_check: verify
+    version_only: update
+  env:
+    GITHUB_TOKEN: ***
+Run echo "INPUT_VERSION_URL=https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz" >> $GITHUB_ENV
+  echo "INPUT_VERSION_URL=https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+Run echo "INPUT_VERSION_FILE=version.json" >> $GITHUB_ENV
+  echo "INPUT_VERSION_FILE=version.json" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+Run echo "INPUT_VERSION_ICON=zed.png" >> $GITHUB_ENV
+  echo "INPUT_VERSION_ICON=zed.png" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+Run echo "INPUT_VERSION_DIRECTORY=" >> $GITHUB_ENV
+  echo "INPUT_VERSION_DIRECTORY=" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+    INPUT_VERSION_ICON: zed.png
+Run echo "INPUT_VERSION_BASH=" >> $GITHUB_ENV
+  echo "INPUT_VERSION_BASH=" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+    INPUT_VERSION_ICON: zed.png
+    INPUT_VERSION_DIRECTORY:
+Run echo "INPUT_VERSION_CHECK=verify" >> $GITHUB_ENV
+  echo "INPUT_VERSION_CHECK=verify" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+    INPUT_VERSION_ICON: zed.png
+    INPUT_VERSION_DIRECTORY:
+    INPUT_VERSION_BASH:
+Run echo "INPUT_VERSION_ONLY=update" >> $GITHUB_ENV
+  echo "INPUT_VERSION_ONLY=update" >> $GITHUB_ENV
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+    INPUT_VERSION_ICON: zed.png
+    INPUT_VERSION_DIRECTORY:
+    INPUT_VERSION_BASH:
+    INPUT_VERSION_CHECK: verify
+Run chmod +x /home/runner/work/_actions/valicm/appimage-bash/main/build.sh
+  chmod +x /home/runner/work/_actions/valicm/appimage-bash/main/build.sh
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+    INPUT_VERSION_ICON: zed.png
+    INPUT_VERSION_DIRECTORY:
+    INPUT_VERSION_BASH:
+    INPUT_VERSION_CHECK: verify
+    INPUT_VERSION_ONLY: update
+Run $GITHUB_ACTION_PATH/build.sh
+  $GITHUB_ACTION_PATH/build.sh
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    GITHUB_TOKEN: ***
+    INPUT_VERSION_URL: https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+    INPUT_VERSION_FILE: version.json
+    INPUT_VERSION_ICON: zed.png
+    INPUT_VERSION_DIRECTORY:
+    INPUT_VERSION_BASH:
+    INPUT_VERSION_CHECK: verify
+    INPUT_VERSION_ONLY: update
+==> Setup default variables
+==> Download Zed
+--2025-01-05 04:33:45--  https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz
+Resolving github.com (github.com)... 140.82.113.4
+Connecting to github.com (github.com)|140.82.113.4|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://github.com/zed-industries/zed/releases/download/v0.167.1/zed-linux-x86_64.tar.gz [following]
+--2025-01-05 04:33:45--  https://github.com/zed-industries/zed/releases/download/v0.167.1/zed-linux-x86_64.tar.gz
+Reusing existing connection to github.com:443.
+HTTP request sent, awaiting response... 302 Found
+Location: https://objects.githubusercontent.com/github-production-release-asset-2e65be/340547520/cefa3090-e893-4192-8e1b-f18cd64bd7c3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20250105%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250105T043345Z&X-Amz-Expires=300&X-Amz-Signature=b2e179e93daa614185efb408266db4419d80cae68bf9bf8382f0e869e108aa3f&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dzed-linux-x86_64.tar.gz&response-content-type=application%2Foctet-stream [following]
+--2025-01-05 04:33:45--  https://objects.githubusercontent.com/github-production-release-asset-2e65be/340547520/cefa3090-e893-4192-8e1b-f18cd64bd7c3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20250105%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250105T043345Z&X-Amz-Expires=300&X-Amz-Signature=b2e179e93daa614185efb408266db4419d80cae68bf9bf8382f0e869e108aa3f&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dzed-linux-x86_64.tar.gz&response-content-type=application%2Foctet-stream
+Resolving objects.githubusercontent.com (objects.githubusercontent.com)... 185.199.110.133, 185.199.109.133, 185.199.111.133, ...
+Connecting to objects.githubusercontent.com (objects.githubusercontent.com)|185.199.110.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 80735524 (77M) [application/octet-stream]
+Saving to: ‘Zed.tar.gz’
+
+     0K .......... .......... .......... .......... ..........  0% 14.7M
+     78800K .......... .......... .......... .......... ...       100%  242M=0.5s
+
+2025-01-05 04:33:45 (152 MB/s) - ‘Zed.tar.gz’ saved [80735524/80735524]
+
+==> Extract Zed
+zed.app/bin/
+zed.app/bin/zed
+zed.app/share/
+zed.app/share/icons/
+zed.app/share/icons/hicolor/
+zed.app/share/icons/hicolor/1024x1024/
+zed.app/share/icons/hicolor/1024x1024/apps/
+zed.app/share/icons/hicolor/1024x1024/apps/zed.png
+zed.app/share/icons/hicolor/512x512/
+zed.app/share/icons/hicolor/512x512/apps/
+zed.app/share/icons/hicolor/512x512/apps/zed.png
+zed.app/share/applications/
+zed.app/share/applications/zed.desktop
+zed.app/lib/
+zed.app/lib/libxcb.so.1
+zed.app/lib/libssl.so.1.1
+zed.app/lib/libXdmcp.so.6
+zed.app/lib/libXau.so.6
+zed.app/lib/libxkbcommon.so.0
+zed.app/lib/libz.so.1
+zed.app/lib/libxcb-xkb.so.1
+zed.app/lib/libxkbcommon-x11.so.0
+zed.app/lib/libbsd.so.0
+zed.app/lib/libcrypto.so.1.1
+zed.app/licenses.md
+zed.app/libexec/
+zed.app/libexec/zed-editor
+==> Check Version Zed
+cat: AppDir/usr/bin/version.json: No such file or directory
+Error: Process completed with exit code 1.
