@@ -1,19 +1,18 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VSCode
-GenericName=VSCode
-Comment=Code Editing. Redefined.
-Exec=code --unity-launch %F
-Icon=code
-Categories=TextEditor;Development;IDE;
-StartupWMClass=Code
+Name=Zed
+GenericName=Text Editor
+Comment=A high-performance, multiplayer code editor.
+TryExec=zeditor
 StartupNotify=true
-Keywords=vscode;Visual Studio Code;Code;
-MimeType=text/plain;inode/directory;application/x-code-workspace;
-Actions=new-empty-window;
+Exec=zeditor %U
+Icon=zed
+Categories=Utility;TextEditor;Development;IDE;
+Keywords=zed;
+MimeType=text/plain;application/x-zerosize;x-scheme-handler/zed;
+Actions=NewWorkspace;
 
-[Desktop Action new-empty-window]
-Name=New Empty Window
-Exec=code --new-window %F
-Icon=code
+[Desktop Action NewWorkspace]
+Exec=zeditor --new %U
+Name=Open a new workspace
