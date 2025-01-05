@@ -29,13 +29,13 @@ jobs:
           
           echo "{\"version\": \"$VERSION\"}" > AppDir/usr/bin/version.json
       - name: Display version.json
-        run: cat version.json
+        run: cat AppDir/usr/bin/version.json
       - name: Build
         id: build
         uses: valicm/appimage-bash@main
         with:
           version_url: "https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz"
-          version_file: 'AppDir/usr/bin/version.json'
+          version_file: 'version.json'
           version_icon: 'share/icons/hicolor/512x512/apps/zed.png'
       - name: Upload artifact
         if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
