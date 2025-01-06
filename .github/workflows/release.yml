@@ -24,7 +24,7 @@ jobs:
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/zed-industries/zed/releases/latest)
 
           # Extract the version tag
-          VERSION=$(echo $LATEST_RELEASE | jq -r '.tag_name' | sed 's/^v//')
+          VERSION=$(echo $LATEST_RELEASE | jq -r '.version')
 
           # Create the version.json file directly in AppDir/usr/bin
           echo "{\"version\": \"$VERSION\"}" > AppDir/usr/bin/version.json
