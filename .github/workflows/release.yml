@@ -1,4 +1,4 @@
-name: Build AppImage
+name: Build Pre-release AppImage
 on:
   workflow_dispatch:
   schedule:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   version:
-    name: Zed AppImage
+    name: Zed Pre-release AppImage
     runs-on: ubuntu-20.04
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -20,21 +20,30 @@ jobs:
         run: |
           mkdir -p AppDir/usr/bin
 
-          # Fetch the latest release information using the GitHub API
-          LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/zed-industries/zed/releases/latest)
+          # Fetch all releases and find the latest pre-release
+          ALL_RELEASES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/zed-industries/zed/releases)
+          VERSION_TAG=$(echo "$ALL_RELEASES" | jq -r 'map(select(.prerelease)) | first | .tag_name')
 
-          # Extract the version tag
-          VERSION=$(echo $LATEST_RELEASE | jq -r '.tag_name' | sed 's/^v//')
+          if [ -z "$VERSION_TAG" ]; then
+            echo "Error: No pre-release found."
+            exit 1
+          fi
 
-          # Create the version.json file directly in AppDir/usr/bin
+          # Extract version without 'v' prefix for version.json
+          VERSION=$(echo "$VERSION_TAG" | sed 's/^v//')
+
+          # Create version.json
           echo "{\"version\": \"$VERSION\"}" > AppDir/usr/bin/version.json
-          echo "Created version.json with content:"
-          cat AppDir/usr/bin/version.json
+          echo "Created version.json with version $VERSION"
+
+          # Output variables for subsequent steps
+          echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
       - name: Build
         id: build
         uses: lavilao/appimage-bash@main
         with:
-          version_url: "https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz"
+          version_url: "https://github.com/zed-industries/zed/releases/download/${{ steps.get_zed_version.outputs.VERSION_TAG }}/zed-linux-x86_64.tar.gz"
           version_file: "version.json"
           version_icon: "zed.png"
       - name: Upload artifact
@@ -47,9 +56,9 @@ jobs:
         if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
         uses: marvinpinto/action-automatic-releases@latest
         with:
-          title: ${{ env.APP_NAME }} AppImage ${{ env.APP_VERSION }}
-          automatic_release_tag: latest
-          prerelease: false
+          title: ${{ env.APP_NAME }} AppImage ${{ env.APP_VERSION }} (Pre-release)
+          automatic_release_tag: latest-pre
+          prerelease: true
           files: |
             dist/
           repo_token: ${{ secrets.GITHUB_TOKEN }}
