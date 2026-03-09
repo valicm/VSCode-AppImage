@@ -36,7 +36,7 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           title: ${{ env.APP_NAME }} AppImage ${{ env.APP_VERSION }}
-          automatic_release_tag: latest
+          automatic_release_tag: ${{ env.APP_VERSION }}
           prerelease: false
           files: |
             dist/
