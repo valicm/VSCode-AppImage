@@ -1,43 +1,95 @@
-name: Build AppImage
+name: Build VSCode AppImage
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 */12 * * *"
+    - cron: '7 */12 * * *'
   push:
-    branches:
-      - "main"
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: appimage-releases
+  cancel-in-progress: false
 
 jobs:
-  version:
-    name: VSCode AppImage
-    runs-on: ubuntu-22.04
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    name: Build and publish VSCode
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v2
-      - name: Install libfuse2
-        run: sudo apt-get install -y libfuse2 imagemagick   
-      - name: Build
+      - name: Build latest and versioned AppImages
         id: build
-        uses: valicm/appimage-bash@main
+        uses: valicm/appimage-bash@v2.0.0
         with:
-          version_url: 'https://code.visualstudio.com/sha/download?build=stable\&os=linux-x64'
+          desktop_entry: |
+            [Desktop Entry]
+            Version=1.0
+            Type=Application
+            Name=VSCode
+            GenericName=VSCode
+            Comment=Code Editing. Redefined.
+            Exec=code --unity-launch %F
+            Icon=code
+            Categories=TextEditor;Development;IDE;
+            StartupWMClass=code
+            StartupNotify=true
+            Keywords=vscode;Visual Studio Code;Code;
+            MimeType=text/plain;inode/directory;application/x-code-workspace;
+            Actions=new-empty-window;
+
+            [Desktop Action new-empty-window]
+            Name=New Empty Window
+            Exec=code --new-window %F
+            Icon=code
+          version_url: 'https://code.visualstudio.com/sha/download?build=stable&os=linux-x64'
           version_file: 'resources/app/package.json'
-          version_bash: 'jq -r  .version'
           version_icon: 'code.png'
-      - name: Upload artifact
-        if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
+          publish_releases: 'true'
+          versioned_releases: 'true'
+      - name: Upload build artifacts
+        if: steps.build.outputs.appimage_path != ''
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP_SHORT_NAME }}.AppImage
-          path: 'dist'
-      - name: Release
-        if: ${{ env.APP_UPDATE_NEEDED == 'true' }}
-        uses: marvinpinto/action-automatic-releases@latest
+          name: AppImage
+          path: dist/
+          if-no-files-found: error
+
+  cleanup:
+    name: Keep 10 versioned releases
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: valicm/appimage-bash/cleanup@v2.0.0
         with:
-          title: ${{ env.APP_NAME }} AppImage ${{ env.APP_VERSION }}
-          automatic_release_tag: ${{ env.APP_VERSION }}
-          prerelease: false
-          files: |
-            dist/
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          keep_releases: '10'
+
+  keepalive:
+    name: Keep scheduled builds active
+    # Runs independently of builds, including when upstream downloads fail.
+    # Set repository variable APPIMAGE_KEEPALIVE=false to disable bot commits.
+    if: github.event_name == 'schedule' && vars.APPIMAGE_KEEPALIVE != 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Record activity after 45 days without a commit
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          last_commit=$(git log -1 --format=%ct)
+          now=$(date +%s)
+          if (( now - last_commit < 45 * 86400 )); then
+            echo "Recent repository activity; no keepalive commit needed."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit --allow-empty -m 'chore: keep scheduled AppImage builds active [skip ci]'
+          git push origin "HEAD:$DEFAULT_BRANCH"
