@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Build latest and versioned AppImages
         id: build
-        uses: valicm/appimage-bash@v2.0.0
+        uses: valicm/appimage-bash@v2.0.2
         with:
           desktop_entry: |
             [Desktop Entry]
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: valicm/appimage-bash/cleanup@v2.0.0
+      - uses: valicm/appimage-bash/cleanup@v2.0.2
         with:
           keep_releases: '10'
 
